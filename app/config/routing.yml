@@ -1,7 +1,0 @@
-project:
-    resource: "@projectBundle/Resources/config/routing.yml"
-    prefix:   /site
-
-app:
-    resource: '@AppBundle/Controller/'
-    type: annotation
