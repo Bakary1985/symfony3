@@ -1,7 +1,7 @@
 <?php
 
 // Connexion � la BDD :
- $mysqli = new Mysqli('localhost', 'root', '', 'bar_burger');
+ $mysqli = new Mysqli('db5000049827.hosting-data.io', 'dbu123487', 'Bak123456789*', 'dbs44678');
 
  $mysqli->set_charset("utf8");  // force les transactions avec la BDD en utf-8
 
