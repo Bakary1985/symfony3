@@ -61,12 +61,12 @@ if (isset($_GET['action']) &&  $_GET['action'] == 'modification') { // affichage
     
     $resultat = $mysqli->query("SELECT * FROM membre WHERE id_membre = '$_GET[id_membre]'");
     $membre_actuel = $resultat->fetch_assoc(); // array qui permet de pré-remplir le formulaire ci-dessous
- debug($membre_actuel,1);
+ //debug($membre_actuel,1);
   }
 
   //---------------- TRAITEMENT -------------------------
 if ($_POST) {
-  //debug($_POST,1);
+  debug($_POST,1);
   
         // Cryptage du mot de passe :
         //$_POST['mdp'] = md5($_POST['mdp']); // la fonction prédéfinie md5() permet de crypter un string. 
@@ -82,7 +82,7 @@ if ($_POST) {
         }
             
         // Insertion en base :
-        $mysqli->query("INSERT INTO membre (nom, email, mdp, statut) VALUES('$_POST[nom]', '$_POST[email]','$_POST[mdp]', 0)"); // 0 pour un membre non admin
+        //$mysqli->query("UPDATE `membre` SET `mdp` = '$_POST[mdp]', `nom` = '$_POST[nom]', `email` = '$_POST[email]' WHERE `membre`.`id_membre` = '$_GET[id_membre]';"); // 0 pour un membre non admin
         
         $contenu .= '<div class="bg-success">Vous avez modifier votre profil</div>';
       
