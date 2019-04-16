@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Ma boutique</title>
+  <title>Mon projet</title>
 
   <link href="<?php echo RACINE_SITE . 'inc/css/bootstrap.min.css'; ?>" rel="stylesheet">
 
@@ -18,7 +18,7 @@
     <div class="container">
       
       <div class="navbar-header">
-          <a class="navbar-brand" href="<?php echo RACINE_SITE . 'boutique.php'; ?>">Ma Boutique</a>
+          <a class="navbar-brand" href="<?php echo RACINE_SITE . 'index.php'; ?>">Mon logo</a>
       </div>
       
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -33,7 +33,7 @@
           }  
             
           if (internauteEstConnecte()) { // membre connecté
-              echo '<li><a href="'. RACINE_SITE .'boutique.php">Boutique</a></li>';
+              echo '<li><a href="'. RACINE_SITE .'index.php">Mon logo</a></li>';
               
               echo '<li><a href="'. RACINE_SITE .'profil.php">Profil</a></li>';
               
@@ -41,7 +41,7 @@
               
               echo '<li><a href="'.RACINE_SITE.'connexion.php?action=deconnexion">Se déconnecter</a></li>';
           } else { // simple visiteur
-              echo '<li><a href="'. RACINE_SITE .'boutique.php">Boutique</a></li>';
+              echo '<li><a href="'. RACINE_SITE .'index.php">Mon logo</a></li>';
               
               echo '<li><a href="'. RACINE_SITE .'inscription.php">Inscription</a></li>';
               

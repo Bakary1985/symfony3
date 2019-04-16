@@ -1,64 +1,68 @@
 <?php
 require_once('inc/init.inc.php');
 
-// Demande de déconnexion par l'internaute :
-if (isset($_GET['action']) && $_GET['action'] == 'deconnexion') {
-  session_destroy();  // on supprime la session du membre s'il demande la déconnexion
-}
+//------------------ TRAITEMENT --------------------
+// 1- Affichage des catÃ©gories :
+$categories_des_produits = $mysqli->query("SELECT DISTINCT categorie FROM produit ORDER BY categorie");
 
-// Internaute déjà connecté est envoyé vers son profil :
-if (internauteEstConnecte()) {
-  // redirection vers la page profil :
-  header('location:profil.php');
-  exit();
-}
-
-// Traitement du formulaire :
-if ($_POST) { // si le formulaire de connexion est soumis
-  
-   $resultat = $mysqli->query("SELECT * FROM membre WHERE pseudo = '$_POST[pseudo]'");
-   
-   if ($resultat->num_rows != 0) { // s'il y a des enregistrements on vérifie le mdp : 
-      $membre = $resultat->fetch_assoc(); // pas de boucle while car un seul résultat tout au plus possible
+$contenu_gauche .= '<div class="col-md-3">';
+    $contenu_gauche .= '<p class="lead">VÃªtements</p>';
+    $contenu_gauche .='<div class="list-group">'; 
       
-      //debug($membre);
+      $contenu_gauche .= '<a href="?categorie=all" class="list-group-item">Tous</a>';
       
-      if ($membre['mdp'] == md5($_POST['mdp'])) {
+      while($cat = $categories_des_produits->fetch_assoc()) {
+        //debug($cat);
         
-        // on remplit la session avec les infos de $membre :
-        foreach($membre as $indice => $valeur) {
-          $_SESSION['membre'][$indice] = $valeur;
-        }
-        header('location:profil.php');
-        exit();
-      } else {
-        $contenu .= '<div class="bg-danger">Erreur sur le mdp</div>';
+        $contenu_gauche .='<a href="?categorie='. $cat['categorie'] .'" class="list-group-item">'. $cat['categorie'] .'</a>';
       }
-   } else {
-     $contenu .= '<div class="bg-danger">Erreur sur le pseudo</div>';
-   }
-} // fin du if ($_POST)
+    $contenu_gauche .= '</div>';
+$contenu_gauche .= '</div>';
 
 
-//------------------------ AFFICHAGE --------------------
+// 2- Affichage des produits selon la catÃ©gorie choisie :
+if (isset($_GET['categorie']) && $_GET['categorie'] != 'all') {
+    $donnees = $mysqli->query("SELECT id_produit, reference, titre, photo, prix, description FROM produit WHERE categorie = '$_GET[categorie]'");
+    
+} else {
+    $donnees = $mysqli->query("SELECT id_produit, reference, titre, photo, prix, description FROM produit");
+}
+
+while($produit = $donnees->fetch_assoc()) {
+    //debug($produit);
+    
+    $contenu_droite .='<div class="col-sm-4 col-lg-4 col-md-4">';
+      $contenu_droite .= '<div class="thumbnail">';
+          $contenu_droite .= '<a href="fiche_produit.php?id_produit='. $produit['id_produit'] .'"><img src="'. $produit['photo'] .'" alt="" width=130 max-height=100></a>';
+          
+          $contenu_droite .='<div class="caption">';
+            $contenu_droite .= '<h4 class="pull-right">'. $produit['prix'] .' â‚¬</h4>';
+            
+            $contenu_droite .= '<h4>'. $produit['titre'] .'</h4>';
+            
+            $contenu_droite .= '<p>'. $produit['description'] .'</p>';
+          
+          $contenu_droite .= '</div>'; 
+      $contenu_droite .= '</div>'; 
+    $contenu_droite .= '</div>';  
+}  // fin boucle while 
+
+
+
+
+//------------------ AFFICHAGE --------------------
 require_once('inc/haut.inc.php');
-echo $contenu;
 ?>
-<h3>Renseignez votre pseudo et votre mot de passe pour vous connecter</h3>
-<form method = "post" action="">
-  <label for="pseudo">Pseudo</label><br>
-  <input type="text" id="pseudo" name="pseudo">
-  <br><br>
-  
-  <label for="mdp">Mot de passe</label><br>
-  <input type="password" id="mdp" name="mdp">
-  <br>
-  
-  <input type="submit" value="Se connecter" class="btn">
-</form>
+  <div class="row">
+      <?php echo $contenu_gauche; ?>
+      
+      <div class="col-md-9">
+          <div class="row">
+            <?php echo $contenu_droite; ?>
+          </div> 
+      </div>
+  </div>
 <?php
 require_once('inc/bas.inc.php');
-
-
 
 
