@@ -54,8 +54,7 @@ echo $contenu;
 <a href="profil.php/?action=modification&id_membre=<?php echo $id_membre ;?>">modifier</a> / <a href="?action=suppression&id_membre=<?php echo $id_membre ;?>" onclick="return(confirm(\'Etes-vous sûr de vouloir votre compte \'));" >supprimer</a>
 <?php 
 // 3- Formulaire HTML :
-if (isset($_GET['action']) &&  $_GET['action'] == 'modification') { // affichage du formulaire quand on est en ajout ou modif. Attention : endif en bas du fichier !
-session_destroy(); 
+if (isset($_GET['action']) &&  $_GET['action'] == 'modification') { // affichage du formulaire quand on est en ajout ou modif. Attention : endif en bas du fichier ! 
   // 8- Pré-remplissage du formulaire de modification :
   if (isset($_GET['id_membre'])) { // si id_produit existe c'est que nous sommes en modification (car on ne passe pas d'id_produit en ajout)
     
