@@ -100,7 +100,7 @@ if ($_POST) {
   <br>
 
   <label for="mdp">Mot de passe</label><br>
-  <input type="password" id="mdp" name="mdp" value="<?php echo $membre_actuel['email']; ?>">
+  <input type="password" id="mdp" name="mdp" value="<?php echo $membre_actuel['mdp']; ?>">
   <br>
 
   <input type="submit" name="inscription" value="Modifiez" class="btn">
