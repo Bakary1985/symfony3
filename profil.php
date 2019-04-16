@@ -55,7 +55,7 @@ echo $contenu;
 <?php 
 // 3- Formulaire HTML :
 if (isset($_GET['action']) &&  $_GET['action'] == 'modification') { // affichage du formulaire quand on est en ajout ou modif. Attention : endif en bas du fichier !
-
+session_destroy(); 
   // 8- Pré-remplissage du formulaire de modification :
   if (isset($_GET['id_membre'])) { // si id_produit existe c'est que nous sommes en modification (car on ne passe pas d'id_produit en ajout)
     
@@ -66,7 +66,7 @@ if (isset($_GET['action']) &&  $_GET['action'] == 'modification') { // affichage
 
   //---------------- TRAITEMENT -------------------------
 if ($_POST) {
-  debug($_POST,1);
+  //debug($_POST,1);
   
         // Cryptage du mot de passe :
         //$_POST['mdp'] = md5($_POST['mdp']); // la fonction prédéfinie md5() permet de crypter un string. 
@@ -86,6 +86,8 @@ if ($_POST) {
         
         $contenu .= '<div class="bg-success">Vous avez modifier votre profil</div>';
       session_destroy();
+       header('location:profil.php');
+      exit();
 
 } // fin du if ($_POST)
   ?>
