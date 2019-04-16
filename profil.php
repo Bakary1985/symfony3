@@ -82,7 +82,7 @@ if ($_POST) {
         }
             
         // Insertion en base :
-        //$mysqli->query("UPDATE `membre` SET `mdp` = '$_POST[mdp]', `nom` = '$_POST[nom]', `email` = '$_POST[email]' WHERE `membre`.`id_membre` = '$_GET[id_membre]';"); // 0 pour un membre non admin
+        $mysqli->query("UPDATE `membre` SET `mdp` = '$_POST[mdp]', `nom` = '$_POST[nom]', `email` = '$_POST[email]' WHERE `membre`.`id_membre` = '$_GET[id_membre]';"); // 0 pour un membre non admin
         
         $contenu .= '<div class="bg-success">Vous avez modifier votre profil</div>';
       
