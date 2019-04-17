@@ -115,8 +115,8 @@ if (isset($_POST['valider']) && isset($_SESSION['panier']['id'])) { // si on a v
     $ip_pool = 'Main Pool';
     $send_at = 'example send_at';
     $result = $mandrill->messages->send($message, $async, $ip_pool, $send_at);
-    print_r($result);
-    
+    //print_r($result);
+
     //5.1 Vérification du stock :
     for ($i = 0; $i < count($_SESSION['panier']['id_produit']); $i++) {
         // On sélectionne en base le stock du produit "$i" :
