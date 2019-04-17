@@ -102,7 +102,7 @@ if (isset($_POST['valider']) && isset($_SESSION['panier']['id'])) { // si on a v
     
     
   try {
-    $mandrill = new Mandrill('565ZYIb4RHDrJ2vGG-kM9A');
+    $mandrill = new Mandrill('Qj6u2RXjNKDZTIv90TOSig');
     $message = array(
         'html' => '<p>Example HTML content</p>',
         'text' => 'Example text content',
