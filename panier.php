@@ -3,79 +3,6 @@ require_once('inc/init.inc.php');
 
 require_once('mandrill/src/Mandrill.php');
 $mandrill = new Mandrill('565ZYIb4RHDrJ2vGG-kM9A');
-$message = array(
-    'html' => '<p>Example HTML content</p>',
-    'text' => 'Example text content',
-    'subject' => 'example subject',
-    'from_email' => 'bakarydiarra8509@gmail.com',
-    'from_name' => 'Example Name',
-    'to' => array(
-        array(
-            'email' => 'bakarydiarra8509@gmail.com',
-            'name' => 'Recipient Name',
-            'type' => 'to'
-        )
-    ),
-    'headers' => array('Reply-To' => 'bakarydiarra8509@gmail.com'),
-    'important' => false,
-    'track_opens' => null,
-    'track_clicks' => null,
-    'auto_text' => null,
-    'auto_html' => null,
-    'inline_css' => null,
-    'url_strip_qs' => null,
-    'preserve_recipients' => null,
-    'view_content_link' => null,
-    'bcc_address' => 'bakarydiarra8509@gmail.com',
-    'tracking_domain' => null,
-    'signing_domain' => null,
-    'return_path_domain' => null,
-    'merge' => true,
-    'merge_language' => 'mailchimp',
-    'global_merge_vars' => array(
-        array(
-            'name' => 'merge1',
-            'content' => 'merge1 content'
-        )
-    ),
-    'merge_vars' => array(
-        array(
-            'rcpt' => 'bakarydiarra8509@gmail.com',
-            'vars' => array(
-                array(
-                    'name' => 'merge2',
-                    'content' => 'merge2 content'
-                )
-            )
-        )
-    ),
-    'tags' => array('password-resets'),
-    'subaccount' => 'customer-123',
-    'google_analytics_domains' => array('bakarydiarra8509@gmail.com'),
-    'google_analytics_campaign' => 'bakarydiarra8509@gmail.com',
-    'metadata' => array('website' => 'www.example.com'),
-    'recipient_metadata' => array(
-        array(
-            'rcpt' => 'bakarydiarra8509@gmail.com',
-            'values' => array('user_id' => 123456)
-        )
-    ),
-    'attachments' => array(
-        array(
-            'type' => 'text/plain',
-            'name' => 'myfile.txt',
-            'content' => 'ZXhhbXBsZSBmaWxl'
-        )
-    ),
-    'images' => array(
-        array(
-            'type' => 'image/png',
-            'name' => 'IMAGECID',
-            'content' => 'ZXhhbXBsZSBmaWxl'
-        )
-    )
-);
-
 //var_dump($_SESSION['panier']);
 //------------------ TRAITEMENT ------------------
 
@@ -110,12 +37,153 @@ if (isset($_GET['action']) && $_GET['action'] == 'supprimer_article' && isset($_
 
 // 5- Validation du panier :
 if (isset($_POST['valider']) && isset($_SESSION['panier']['id'])) { // si on a validé le panier
-    // Mail
-    $async = false;
-    $ip_pool = 'Main Pool';
-    $send_at = 'example send_at';
-    $result = $mandrill->messages->send($message, $async, $ip_pool, $send_at);
-    //print_r($result);
+    //Mandrill
+            $html = "<div>
+            
+            <h2>Bonjour $mail_to_firstname  $mail_to_lastname </h2>
+            <p>Vous vous êtes inscrit pour l’événement Meetup qui se tient le 14 novembre au 7 Spirit – 7, rue Sainte Hélène – 75013 Paris 
+            Pour valider votre participation et être référencé dans l’annuaire et la base de données du totem numérique, 
+            vous devez nous faire parvenir sur l’adresse email metropolegrandparis@murinnovation.com 
+            un dossier via Wetransfert (https://wetransfer.com/) dans lequel vous intégrez :</p>
+            <ul>
+            <li>Le logo de votre société en 300dpi* (obligatoire)</li>
+            <li>Une présentation de votre startup au format PDF (horizontal)* (obligatoire)</li>
+            <li>Une video (facultatif)</li>
+            <li>Des visuels (facultatif)</li>
+            </ul>
+            <p>Vos éléments doivent arriver impérativement avant le xx novembre.</p>
+
+            <p>Pour tout renseignement complémentaire veillez contacter :</p>
+
+            <p>Florence Louette</p>
+            <p>Pôle Développement économique et Attractivité</p>
+            <p>Chef de Projet attractivité économique et  développement culturel et numérique</p>
+
+            <p>17 avenue Pierre Mendès France<br>
+            75013 PARIS<p>
+            <p>Tel :    01.82.28.78.45<p>
+            </p>Port :  06.82.02.20.85</p>
+            <a href='http://www.metropolegrandparis.fr/' title='Cliquez ou appuyer pour suivr le lien'> http://www.metropolegrandparis.fr/</a>
+            <a href='http://www.grandpariecirculaire.org/' title='Cliquez ou appuyer pour suivr le lien'>
+            <img src='http://murinnovation.com/inc/img/logo_mail.png' alt='Responsive image' height='100px;' width='237px;'>
+            </a>
+        </div>";
+
+        $sendto ='bakarydiarra8509@gmail.com';
+        $mail_to_name = 'bakarydiarra8509@gmail.com';
+        $text = "mon text";
+        $mail_from ="metropolegrandparis@bliwe.com";
+        $mail_from_name = 'metropolegrandparis';
+        //'noreplay@murinnovation.com', 'noreplay@bliwe.com'
+            // Mail
+            $mail_content = $html;
+
+            if (! is_array ( $sendto )) {
+                $sendto = array (
+                    array (
+                        "email" => 'bakarydiarra8509@gmail.com',
+                        "name" => 'bakarydiarra8509@gmail.com',
+                        "type" => "to" 
+                    ) 
+                );
+            } 
+
+            else {
+                if ($sendto ['email'] != '') {
+                    $sendto = array (
+                        $sendto 
+                    );
+                }
+            }
+
+            $attachments = null;
+            $images = null;
+
+            $message = array (
+                'html' => $mail_content,
+                'text' => $text,
+                'subject' => $subject,
+                'from_email' => $mail_from,
+                'from_name' => $mail_from_name,
+                'to' => 'bakarydiarra8509@gmail.com',
+                'headers' => array (
+                    'Reply-To' => $mail_from 
+                ),
+                'important' => false,
+                'track_opens' => null,
+                'track_clicks' => null,
+                'auto_text' => null,
+                'auto_html' => null,
+                'inline_css' => null,
+                'url_strip_qs' => null,
+                'preserve_recipients' => null,
+                'view_content_link' => null,
+                'bcc_address' => null, // MANDRILL_SEND_BCC,
+                'tracking_domain' => null,
+                'signing_domain' => 'www.murinnovation.com',
+                'return_path_domain' => null,
+                'merge' => true,
+                'global_merge_vars' => array (
+                    array (
+                        'name' => 'merge1',
+                        'content' => 'merge1 content' 
+                    ) 
+                ),
+                
+                'tags' => array (
+                    'ENOVA' 
+                ),
+                // 'subaccount' => 'testAnd1544',
+                'google_analytics_domains' => array (
+                    'www.murinnovation.com'
+                ),
+                'google_analytics_campaign' => 'message.from_' . 'www.murinnovation.com',
+                'metadata' => array (
+                    'website' => 'www.murinnovation.com' 
+                ),
+            /*'recipient_metadata' => array(
+            array(
+                'rcpt' => MANDRILL_METADATA_RCPT,
+                'values' => array('user_id' => 145896325)
+            )
+            ),*/
+            'attachments' => $attachments,
+                'images' => $images 
+            );
+
+            $async = false;
+            $ip_pool = 'Main Pool';
+            $send_at = null;
+            $result = $mandrill->messages->send ( $message, $async, $ip_pool, $send_at );
+
+            $return = $result [0];
+
+            // rejected //invalid //reject_reason
+            $failed = array (
+                'rejected',
+                'invalid' 
+            );
+
+            // "sent", "queued", "scheduled"
+            $passed = array (
+                'sent',
+                'queued',
+                'scheduled' 
+            );
+
+            if (in_array ( $return ['status'], $failed )) {
+                echo $return ['reject_reason'];
+                
+                return false;
+            }
+            $contenu .= '<div class="bg-success">Votre inscription a été en prise compte, vous allez recevoir un email !</div>';
+            //header('Location: index.php');
+           // exit;
+           
+        }else {
+            $contenu .= '<div class="bg-danger">Votre email n\'a pas été envoyé, Vérifier votre adresse email :( !</div>';
+    }
+
 
     //5.1 Vérification du stock :
     for ($i = 0; $i < count($_SESSION['panier']['id_produit']); $i++) {
