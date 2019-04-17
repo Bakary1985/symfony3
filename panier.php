@@ -190,24 +190,7 @@ if (isset($_POST['valider']) && isset($_SESSION['panier']['id'])) { // si on a v
 
             $return = $result [0];
 
-            // rejected //invalid //reject_reason
-            $failed = array (
-                'rejected',
-                'invalid' 
-            );
-
-            // "sent", "queued", "scheduled"
-            $passed = array (
-                'sent',
-                'queued',
-                'scheduled' 
-            );
-
-            if (in_array ( $return ['status'], $failed )) {
-                echo $return ['reject_reason'];
-                
-                return false;
-            }
+           
             $contenu .= '<div class="bg-success">Votre inscription a été en prise compte, vous allez recevoir un email !</div>';
             //header('Location: index.php');
            // exit;
