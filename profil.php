@@ -1,5 +1,7 @@
 <?php
 require_once('inc/init.inc.php');
+require_once('mandrill/src/Mandrill.php');
+$mandrill = new Mandrill('565ZYIb4RHDrJ2vGG-kM9A');
 
 //--------------------- TRAITEMENT -------------------
 // Redirection si visiteur non connecté :
