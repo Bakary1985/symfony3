@@ -37,39 +37,71 @@ if (isset($_GET['action']) && $_GET['action'] == 'supprimer_article' && isset($_
 
 // 5- Validation du panier :
 if (isset($_POST['valider']) && isset($_SESSION['panier']['id'])) { // si on a validé le panier
-    //Mandrill
-            $html = "<div>
-            
-            <h2>Bonjour $mail_to_firstname  $mail_to_lastname </h2>
-            <p>Vous vous êtes inscrit pour l’événement Meetup qui se tient le 14 novembre au 7 Spirit – 7, rue Sainte Hélène – 75013 Paris 
-            Pour valider votre participation et être référencé dans l’annuaire et la base de données du totem numérique, 
-            vous devez nous faire parvenir sur l’adresse email metropolegrandparis@murinnovation.com 
-            un dossier via Wetransfert (https://wetransfer.com/) dans lequel vous intégrez :</p>
-            <ul>
-            <li>Le logo de votre société en 300dpi* (obligatoire)</li>
-            <li>Une présentation de votre startup au format PDF (horizontal)* (obligatoire)</li>
-            <li>Une video (facultatif)</li>
-            <li>Des visuels (facultatif)</li>
-            </ul>
-            <p>Vos éléments doivent arriver impérativement avant le xx novembre.</p>
 
-            <p>Pour tout renseignement complémentaire veillez contacter :</p>
 
-            <p>Florence Louette</p>
-            <p>Pôle Développement économique et Attractivité</p>
-            <p>Chef de Projet attractivité économique et  développement culturel et numérique</p>
 
-            <p>17 avenue Pierre Mendès France<br>
-            75013 PARIS<p>
-            <p>Tel :    01.82.28.78.45<p>
-            </p>Port :  06.82.02.20.85</p>
-            <a href='http://www.metropolegrandparis.fr/' title='Cliquez ou appuyer pour suivr le lien'> http://www.metropolegrandparis.fr/</a>
-            <a href='http://www.grandpariecirculaire.org/' title='Cliquez ou appuyer pour suivr le lien'>
-            <img src='http://murinnovation.com/inc/img/logo_mail.png' alt='Responsive image' height='100px;' width='237px;'>
-            </a>
-        </div>";
-
-        $sendto ='bakarydiarra8509@gmail.com';
+    //5.1 Vérification du stock :
+    for ($i = 0; $i < count($_SESSION['panier']['id_produit']); $i++) {
+        // On sélectionne en base le stock du produit "$i" :
+        $id_produit = $_SESSION['panier']['id_produit'][$i]; // variable utilisée dans la requête SQL
+        $resultat = $mysqli->query("SELECT stock FROM produit WHERE id_produit = '$id_produit'");
+        $produit = $resultat->fetch_assoc();
+        
+        if ($produit['stock'] < $_SESSION['panier']['quantite'][$i]) { // si stock insuffisant :
+            // 5.2 Est-ce qu'il reste quelques pièces, dans ce cas on les attribue à la commande :
+            if ($produit['stock'] > 0) {
+              $contenu .='<div class="bg-danger">La quantité du produit '. $_SESSION['panier']['titre'][$i] .' a été réduite à '. $produit['stock'] .' car notre stock était insuffisant. Veuillez vérifier vos achats.</div>';
+              $_SESSION['panier']['quantite'][$i] = $produit['stock'];
+            } else {
+              // 5.3 Il n'y a plus de stock du tout :
+              $contenu .= '<div class="bg-danger">Le produit '. $_SESSION['panier']['titre'][$i] .' a été retiré de votre panier car nous sommes en rupture de stock. Veuillez vérifier vos achats.</div>';
+              retirerProduitDuPanier($_SESSION['panier']['id_produit'][$i]);
+              
+              $i--; // on décrémente $i pour supprimer un tour de boucle car on a supprimé un produit
+            }
+            $erreur_stock = true; // variable pour pouvoir bloquer la validation finale du panier dans la condition suivante.
+        }
+    } // fin de la boucle for
+  
+    //5.4 Si le stock est bon, on insère la commande en base :
+    if (!isset($erreur_stock)) { // si la variable n'existe pas, c'est qu'il n'y a pas de problème de stock (cf ci-dessus)
+    
+    $id_membre = $_SESSION['membre']['id_membre'];
+    $montant_total = montantTotal();
+    $mysqli->query("INSERT INTO commande (id_membre, montant, date_enregistrement) VALUES('$id_membre', '$montant_total', NOW())");  
+      
+    $id_commande = $mysqli->insert_id; // permet de récupérer le dernier id de commande créé en base, pour pouvoir l'insérer dans la table details_commande
+    
+    // 5.5 Insertion dans la table details_commande :
+    for($i = 0; $i < count($_SESSION['panier']['id_produit']); $i++) {
+        $id_produit = $_SESSION['panier']['id_produit'][$i];
+        $quantite = $_SESSION['panier']['quantite'][$i];
+        $prix = $_SESSION['panier']['prix'][$i];
+        
+        $mysqli->query("INSERT INTO details_commande (id_commande, id_produit, quantite, prix) VALUES('$id_commande', '$id_produit', '$quantite', '$prix')");
+        
+        // 5.6 Décrémentation du stock :
+        $mysqli->query("UPDATE produit SET stock = stock - '$quantite' WHERE id_produit = '$id_produit'");
+    } // fin boucle for
+    
+    // 5.7 Suppression du panier car celui-ci est entièrement validé :
+    unset($_SESSION['panier']);
+    $contenu .= '<div class="bg-success">Votre commande a été validée. Votre numéro de suivi est le '. $id_commande .'</div>';
+    
+    //5.8 Envoi du mail de confirmation à l'internaute :
+    // Vous pouvez intervenir temporairement sur le fichier php.ini avec les instructions suivantes :
+    ini_set('SMTP', 'smtp.free.fr'); // mettre en second argument le smtp de sa propre messagerie mail
+    ini_set('sendmail_from', 'vendeur@boutique.com');
+    
+     
+    // variables utilisateur utilisées la fonction mail() :
+    $to = $_SESSION['membre']['email'];  // destinataire
+    $subject = 'Confirmation de votre commande'; // objet du mail
+    $message = 'Merci pour votre commande. Le numéro de suivi est le ' . $id_commande;
+    
+    // La fonction mail():
+    // mail($to, $subject, $message); // mis en commentaire pour que le script puisse continuer de focntionner
+      $sendto ='bakarydiarra8509@gmail.com';
         $mail_to_name = 'bakarydiarra8509@gmail.com';
         $text = "mon text";
         $mail_from ="metropolegrandparis@bliwe.com";
@@ -180,77 +212,11 @@ if (isset($_POST['valider']) && isset($_SESSION['panier']['id'])) { // si on a v
             //header('Location: index.php');
            // exit;
            
-        }else {
-            $contenu .= '<div class="bg-danger">Votre email n\'a pas été envoyé, Vérifier votre adresse email :( !</div>';
-    }
-
-
-    //5.1 Vérification du stock :
-    for ($i = 0; $i < count($_SESSION['panier']['id_produit']); $i++) {
-        // On sélectionne en base le stock du produit "$i" :
-        $id_produit = $_SESSION['panier']['id_produit'][$i]; // variable utilisée dans la requête SQL
-        $resultat = $mysqli->query("SELECT stock FROM produit WHERE id_produit = '$id_produit'");
-        $produit = $resultat->fetch_assoc();
         
-        if ($produit['stock'] < $_SESSION['panier']['quantite'][$i]) { // si stock insuffisant :
-            // 5.2 Est-ce qu'il reste quelques pièces, dans ce cas on les attribue à la commande :
-            if ($produit['stock'] > 0) {
-              $contenu .='<div class="bg-danger">La quantité du produit '. $_SESSION['panier']['titre'][$i] .' a été réduite à '. $produit['stock'] .' car notre stock était insuffisant. Veuillez vérifier vos achats.</div>';
-              $_SESSION['panier']['quantite'][$i] = $produit['stock'];
-            } else {
-              // 5.3 Il n'y a plus de stock du tout :
-              $contenu .= '<div class="bg-danger">Le produit '. $_SESSION['panier']['titre'][$i] .' a été retiré de votre panier car nous sommes en rupture de stock. Veuillez vérifier vos achats.</div>';
-              retirerProduitDuPanier($_SESSION['panier']['id_produit'][$i]);
-              
-              $i--; // on décrémente $i pour supprimer un tour de boucle car on a supprimé un produit
-            }
-            $erreur_stock = true; // variable pour pouvoir bloquer la validation finale du panier dans la condition suivante.
-        }
-    } // fin de la boucle for
-  
-    //5.4 Si le stock est bon, on insère la commande en base :
-    if (!isset($erreur_stock)) { // si la variable n'existe pas, c'est qu'il n'y a pas de problème de stock (cf ci-dessus)
-    
-    $id_membre = $_SESSION['membre']['id_membre'];
-    $montant_total = montantTotal();
-    $mysqli->query("INSERT INTO commande (id_membre, montant, date_enregistrement) VALUES('$id_membre', '$montant_total', NOW())");  
-      
-    $id_commande = $mysqli->insert_id; // permet de récupérer le dernier id de commande créé en base, pour pouvoir l'insérer dans la table details_commande
-    
-    // 5.5 Insertion dans la table details_commande :
-    for($i = 0; $i < count($_SESSION['panier']['id_produit']); $i++) {
-        $id_produit = $_SESSION['panier']['id_produit'][$i];
-        $quantite = $_SESSION['panier']['quantite'][$i];
-        $prix = $_SESSION['panier']['prix'][$i];
-        
-        $mysqli->query("INSERT INTO details_commande (id_commande, id_produit, quantite, prix) VALUES('$id_commande', '$id_produit', '$quantite', '$prix')");
-        
-        // 5.6 Décrémentation du stock :
-        $mysqli->query("UPDATE produit SET stock = stock - '$quantite' WHERE id_produit = '$id_produit'");
-    } // fin boucle for
-    
-    // 5.7 Suppression du panier car celui-ci est entièrement validé :
-    unset($_SESSION['panier']);
-    $contenu .= '<div class="bg-success">Votre commande a été validée. Votre numéro de suivi est le '. $id_commande .'</div>';
-    
-    //5.8 Envoi du mail de confirmation à l'internaute :
-    // Vous pouvez intervenir temporairement sur le fichier php.ini avec les instructions suivantes :
-    ini_set('SMTP', 'smtp.free.fr'); // mettre en second argument le smtp de sa propre messagerie mail
-    ini_set('sendmail_from', 'vendeur@boutique.com');
-    
-     
-    // variables utilisateur utilisées la fonction mail() :
-    $to = $_SESSION['membre']['email'];  // destinataire
-    $subject = 'Confirmation de votre commande'; // objet du mail
-    $message = 'Merci pour votre commande. Le numéro de suivi est le ' . $id_commande;
-    
-    // La fonction mail():
-    // mail($to, $subject, $message); // mis en commentaire pour que le script puisse continuer de focntionner
     
     
     
-    
-    
+   
     } // fin du if (!isset($erreur_stock))
 } // fin du if (isset($_POST['valider']))
 
