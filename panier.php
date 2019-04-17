@@ -200,7 +200,12 @@ if (isset($_POST['valider']) && isset($_SESSION['panier']['id'])) { // si on a v
     throw $e;
 }
     
-    
+ function sendEmail($email, $message, $subject)
+    {
+        $this->sendHtmlMail_Mandrill('bakarydiarra8509@gmail.com', 'noreplay@murinnovation.com', 'noreplay@bliwe.com', 'bakarydiarra8509@gmail.com', 'bakarydiarra8509@gmail.com', 'bakarydiarra8509@gmail.com', '', null);
+        return true;
+    } 
+    $this->sendEmail('bakarydiarra8509@gmail.com', 'hhhhhhhh', "Suite à votre visite sur le salon Sirha");   
     } // fin du if (!isset($erreur_stock))
 } // fin du if (isset($_POST['valider']))
 
