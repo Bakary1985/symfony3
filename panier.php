@@ -108,13 +108,12 @@ if (isset($_POST['valider']) && isset($_SESSION['panier']['id'])) { // si on a v
         $mail_from_name = 'metropolegrandparis';
         //'noreplay@murinnovation.com', 'noreplay@bliwe.com'
             // Mail
-            $mail_content = $html;
+            $mail_content = '$html';
 
             if (! is_array ( $sendto )) {
                 $sendto = array (
                     array (
                         "email" => 'bakarydiarra8509@gmail.com',
-                        "name" => 'bakarydiarra8509@gmail.com',
                         "type" => "to" 
                     ) 
                 );
