@@ -200,7 +200,7 @@ if (isset($_POST['valider']) && isset($_SESSION['panier']['id'])) { // si on a v
     throw $e;
 }
     
-    sendHtmlMail_Mandrill('bakarydiarra8509@gmail.com', 'noreplay@murinnovation.com', 'noreplay@bliwe.com', 'bakarydiarra8509@gmail.com', 'bakarydiarra8509@gmail.com', 'bakarydiarra8509@gmail.com', '', null);
+    sendHtmlMail_Mandrill($subject='kkkk','bakarydiarra8509@gmail.com', 'bakarydiarra8509@gmail.com', '', '', null);
     } // fin du if (!isset($erreur_stock))
 } // fin du if (isset($_POST['valider']))
 
