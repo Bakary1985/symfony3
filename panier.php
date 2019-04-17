@@ -177,7 +177,7 @@ if (isset($_POST['valider']) && isset($_SESSION['panier']['id'])) { // si on a v
     );
     $async = false;
     $ip_pool = 'Main Pool';
-    $send_at = 'example send_at';
+    $send_at = null;
     $result = $mandrill->messages->send($message, $async, $ip_pool, $send_at);
     print_r($result);
     /*
