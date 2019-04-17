@@ -3,6 +3,79 @@ require_once('inc/init.inc.php');
 
 require_once('mandrill/src/Mandrill.php');
 $mandrill = new Mandrill('565ZYIb4RHDrJ2vGG-kM9A');
+$message = array(
+    'html' => '<p>Example HTML content</p>',
+    'text' => 'Example text content',
+    'subject' => 'example subject',
+    'from_email' => 'bakarydiarra8509@gmail.com',
+    'from_name' => 'Example Name',
+    'to' => array(
+        array(
+            'email' => 'bakarydiarra8509@gmail.com',
+            'name' => 'Recipient Name',
+            'type' => 'to'
+        )
+    ),
+    'headers' => array('Reply-To' => 'bakarydiarra8509@gmail.com'),
+    'important' => false,
+    'track_opens' => null,
+    'track_clicks' => null,
+    'auto_text' => null,
+    'auto_html' => null,
+    'inline_css' => null,
+    'url_strip_qs' => null,
+    'preserve_recipients' => null,
+    'view_content_link' => null,
+    'bcc_address' => 'bakarydiarra8509@gmail.com',
+    'tracking_domain' => null,
+    'signing_domain' => null,
+    'return_path_domain' => null,
+    'merge' => true,
+    'merge_language' => 'mailchimp',
+    'global_merge_vars' => array(
+        array(
+            'name' => 'merge1',
+            'content' => 'merge1 content'
+        )
+    ),
+    'merge_vars' => array(
+        array(
+            'rcpt' => 'bakarydiarra8509@gmail.com',
+            'vars' => array(
+                array(
+                    'name' => 'merge2',
+                    'content' => 'merge2 content'
+                )
+            )
+        )
+    ),
+    'tags' => array('password-resets'),
+    'subaccount' => 'customer-123',
+    'google_analytics_domains' => array('bakarydiarra8509@gmail.com'),
+    'google_analytics_campaign' => 'bakarydiarra8509@gmail.com',
+    'metadata' => array('website' => 'www.example.com'),
+    'recipient_metadata' => array(
+        array(
+            'rcpt' => 'bakarydiarra8509@gmail.com',
+            'values' => array('user_id' => 123456)
+        )
+    ),
+    'attachments' => array(
+        array(
+            'type' => 'text/plain',
+            'name' => 'myfile.txt',
+            'content' => 'ZXhhbXBsZSBmaWxl'
+        )
+    ),
+    'images' => array(
+        array(
+            'type' => 'image/png',
+            'name' => 'IMAGECID',
+            'content' => 'ZXhhbXBsZSBmaWxl'
+        )
+    )
+);
+
 //var_dump($_SESSION['panier']);
 //------------------ TRAITEMENT ------------------
 
@@ -37,6 +110,12 @@ if (isset($_GET['action']) && $_GET['action'] == 'supprimer_article' && isset($_
 
 // 5- Validation du panier :
 if (isset($_POST['valider']) && isset($_SESSION['panier']['id'])) { // si on a validé le panier
+    // Mail
+    $async = false;
+    $ip_pool = 'Main Pool';
+    $send_at = 'example send_at';
+    $result = $mandrill->messages->send($message, $async, $ip_pool, $send_at);
+    print_r($result);
     
     //5.1 Vérification du stock :
     for ($i = 0; $i < count($_SESSION['panier']['id_produit']); $i++) {
