@@ -177,7 +177,7 @@ if (isset($_POST['valider']) && isset($_SESSION['panier']['id'])) { // si on a v
     );
     $async = false;
     $ip_pool = 'Main Pool';
-    $send_at = null;
+    $send_at = 'example send_at';
     $result = $mandrill->messages->send($message, $async, $ip_pool, $send_at);
     print_r($result);
     /*
@@ -200,7 +200,7 @@ if (isset($_POST['valider']) && isset($_SESSION['panier']['id'])) { // si on a v
     throw $e;
 }
     
-    sendEmail('bakarydiarra8509@gmail.com', 'bakarydiarra8509@gmail.com', null);
+    
     } // fin du if (!isset($erreur_stock))
 } // fin du if (isset($_POST['valider']))
 
