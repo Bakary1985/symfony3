@@ -1,7 +1,5 @@
 <?php
 require_once('inc/init.inc.php');
-require_once('mandrill/src/Mandrill.php');
-$mandrill = new Mandrill('565ZYIb4RHDrJ2vGG-kM9A');
 
 //--------------------- TRAITEMENT -------------------
 // Redirection si visiteur non connecté :
@@ -52,9 +50,10 @@ require_once('inc/haut.inc.php');
 echo $contenu;
 
 
-?>
-<a href="profil.php/?action=modification&id_membre=<?php echo $id_membre ;?>">modifier</a> / <a href="?action=suppression&id_membre=<?php echo $id_membre ;?>" onclick="return(confirm(\'Etes-vous sûr de vouloir votre compte \'));" >supprimer</a>
-<?php 
+echo '<a href="profil.php/?action=modification&id_membre='.$id_membre.'">modifier</a> /
+ <a href="?action=suppression&id_membre='.$id_membre.'" 
+ onclick="return(confirm(\'Etes-vous sûr de vouloir votre compte \'));" >supprimer</a>';
+
 // 3- Formulaire HTML :
 if (isset($_GET['action']) &&  $_GET['action'] == 'modification') { // affichage du formulaire quand on est en ajout ou modif. Attention : endif en bas du fichier ! 
   // 8- Pré-remplissage du formulaire de modification :
