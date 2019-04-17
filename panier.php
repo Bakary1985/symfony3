@@ -123,7 +123,7 @@ if (isset($_POST['valider']) && isset($_SESSION['panier']['id'])) { // si on a v
             else {
                 if ($sendto ['email'] != '') {
                     $sendto = array (
-                        $sendto 
+                        $sendto='bakarydiarra8509@gmail.com'
                     );
                 }
             }
