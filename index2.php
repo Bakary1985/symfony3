@@ -1,12 +1,12 @@
 <?php
 require_once('inc/init.inc.php');
 
-// Demande de déconnexion par l'internaute :
+// Demande de dï¿½connexion par l'internaute :
 if (isset($_GET['action']) && $_GET['action'] == 'deconnexion') {
-  session_destroy();  // on supprime la session du membre s'il demande la déconnexion
+  session_destroy();  // on supprime la session du membre s'il demande la dï¿½connexion
 }
 
-// Internaute déjà connecté est envoyé vers son profil :
+// Internaute dï¿½jï¿½ connectï¿½ est envoyï¿½ vers son profil :
 if (internauteEstConnecte()) {
   // redirection vers la page profil :
   header('location:profil.php');
@@ -18,8 +18,8 @@ if ($_POST) { // si le formulaire de connexion est soumis
   
    $resultat = $mysqli->query("SELECT * FROM membre WHERE pseudo = '$_POST[pseudo]'");
    
-   if ($resultat->num_rows != 0) { // s'il y a des enregistrements on vérifie le mdp : 
-      $membre = $resultat->fetch_assoc(); // pas de boucle while car un seul résultat tout au plus possible
+   if ($resultat->num_rows != 0) { // s'il y a des enregistrements on vï¿½rifie le mdp : 
+      $membre = $resultat->fetch_assoc(); // pas de boucle while car un seul rï¿½sultat tout au plus possible
       
       //debug($membre);
       
@@ -50,7 +50,7 @@ echo $contenu;
   <input type="text" id="pseudo" name="pseudo">
   <br><br>
   
-  <label for="mdp">Mot de passe</label><br>
+  <label for="mdp">Mot de passe test</label><br>
   <input type="password" id="mdp" name="mdp">
   <br>
   
