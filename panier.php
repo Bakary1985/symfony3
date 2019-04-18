@@ -108,7 +108,7 @@ if (isset($_POST['valider']) && isset($_SESSION['panier']['id'])) { // si on a v
         $sendto =$email;
         $mail_to_name = 'bakary';
         $text = "mon text";
-        $mail_from ="Mon restaurant";
+        $mail_from ="bar@bar.fr";
         $mail_from_name = 'Vore bar';
 //'noreplay@murinnovation.com', 'noreplay@bliwe.com'
         // Mail
