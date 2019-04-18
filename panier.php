@@ -108,8 +108,8 @@ if (isset($_POST['valider']) && isset($_SESSION['panier']['id'])) { // si on a v
         $sendto =$email;
         $mail_to_name = 'bakary';
         $text = "mon text";
-        $mail_from ="bar@bar.fr";
-        $mail_from_name = 'Vore bar';
+        $mail_from ="metropolegrandparis@bliwe.com";
+        $mail_from_name = 'metropolegrandparis';
 //'noreplay@murinnovation.com', 'noreplay@bliwe.com'
         // Mail
         $mail_content = $html;
@@ -156,7 +156,7 @@ if (isset($_POST['valider']) && isset($_SESSION['panier']['id'])) { // si on a v
             'view_content_link' => null,
             'bcc_address' => null, // MANDRILL_SEND_BCC,
             'tracking_domain' => null,
-            'signing_domain' => 'Vore bar',
+            'signing_domain' => 'www.murinnovation.com',
             'return_path_domain' => null,
             'merge' => true,
             'global_merge_vars' => array (
