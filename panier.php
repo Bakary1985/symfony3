@@ -87,8 +87,8 @@ if (isset($_POST['valider']) && isset($_SESSION['panier']['id'])) { // si on a v
     
     //5.8 Envoi du mail de confirmation à l'internaute :
     // Vous pouvez intervenir temporairement sur le fichier php.ini avec les instructions suivantes :
-    ini_set('SMTP', 'smtp.free.fr'); // mettre en second argument le smtp de sa propre messagerie mail
-    ini_set('sendmail_from', 'vendeur@boutique.com');
+    //ini_set('SMTP', 'smtp.free.fr'); // mettre en second argument le smtp de sa propre messagerie mail
+    //ini_set('sendmail_from', 'vendeur@boutique.com');
     
      
     // variables utilisateur utilisées la fonction mail() :
@@ -109,7 +109,7 @@ if (isset($_POST['valider']) && isset($_SESSION['panier']['id'])) { // si on a v
         $mail_to_name = 'bakary';
         $text = "mon text";
         $mail_from ="metropolegrandparis@bliwe.com";
-        $mail_from_name = 'metropolegrandparis';
+        $mail_from_name = 'bar';
 //'noreplay@murinnovation.com', 'noreplay@bliwe.com'
         // Mail
         $mail_content = $html;
