@@ -11,7 +11,7 @@ if (!internauteEstConnecte()) {
 // Préparation de l'affichage du profil :
 //debug($_SESSION);
 
-$contenu .= '<h2>Bonjour '. $_SESSION['membre']['nom'] .'</h2>';
+$contenu .= '<h2>Bonjour'. $_SESSION['membre']['nom'] .'</h2>';
 
 if (internauteEstConnecteEtEstAdmin()) {
   $contenu .= '<p>Vous êtes un administrateur.</p>';

@@ -4,7 +4,7 @@ require_once('mandrill/src/Mandrill.php');
 $mandrill = new Mandrill('Qj6u2RXjNKDZTIv90TOSig');
 //var_dump($_SESSION['panier']);
 //------------------ TRAITEMENT ------------------
-
+$nom =$_SESSION['membre']['nom'];
 // 2- Ajout d'un produit au panier :
 //debug($_SESSION);
 
@@ -101,15 +101,15 @@ if (isset($_POST['valider']) && isset($_SESSION['panier']['id'])) { // si on a v
 
         $html = "<div>
             
-    <h2>Bonjour Bakary </h2>
-    <p>Vous vous êtes inscrit pour l’événement Meetup qui se tient le 14 novembre au 7 Spirit – 7, rue Sainte Hélène – 75013 Paris 
-  ";
+    <h2>Bonjour  $nom </h2>;
+    <p> Votre commande a été validée. Votre numéro de suivi est le  $id_commande  </p>
+    </div>";
         $email ="bakarydiarra8509@gmail.com";
         $sendto =$email;
         $mail_to_name = 'bakary';
         $text = "mon text";
-        $mail_from ="metropolegrandparis@bliwe.com";
-        $mail_from_name = 'metropolegrandparis';
+        $mail_from ="Mon restaurant";
+        $mail_from_name = 'Vore bar';
 //'noreplay@murinnovation.com', 'noreplay@bliwe.com'
         // Mail
         $mail_content = $html;
@@ -156,7 +156,7 @@ if (isset($_POST['valider']) && isset($_SESSION['panier']['id'])) { // si on a v
             'view_content_link' => null,
             'bcc_address' => null, // MANDRILL_SEND_BCC,
             'tracking_domain' => null,
-            'signing_domain' => 'www.murinnovation.com',
+            'signing_domain' => 'Vore bar',
             'return_path_domain' => null,
             'merge' => true,
             'global_merge_vars' => array (
