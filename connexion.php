@@ -29,8 +29,8 @@ if ($_POST) { // si le formulaire de connexion est soumis
         foreach($membre as $indice => $valeur) {
           $_SESSION['membre'][$indice] = $valeur;
         }
-        header('location:profil.php');
-        exit();
+        //header('location:profil.php');
+        //exit();
       } else {
         $contenu .= '<div class="bg-danger">Erreur sur le mdp</div>';
       }
