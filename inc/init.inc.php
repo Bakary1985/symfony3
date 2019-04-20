@@ -1,7 +1,9 @@
 <?php
 
 // Connexion � la BDD :
- $mysqli = new Mysqli('db5000049827.hosting-data.io', 'dbu123487', 'Bak123456789*', 'dbs44678');
+ //$mysqli = new Mysqli('db5000049827.hosting-data.io', 'dbu123487', 'Bak123456789*', 'dbs44678');
+// Connexion � la BDD :
+ $mysqli = new Mysqli('localhost', 'root', '', 'bar_burger');
 
  $mysqli->set_charset("utf8");  // force les transactions avec la BDD en utf-8
 
@@ -10,7 +12,7 @@
 session_start();
 
 // Chemin du site :
-define('RACINE_SITE', '/'); // on d�finit le chemin de la racine du site pour pouvoir �tablir des url de fichiers en chemin absolu que l'on soit dans un template admin ou front
+define('RACINE_SITE', '/symfony3/'); // on d�finit le chemin de la racine du site pour pouvoir �tablir des url de fichiers en chemin absolu que l'on soit dans un template admin ou front
 
 // D�claration de variables d'affichage de contenus :
 $contenu = '';
