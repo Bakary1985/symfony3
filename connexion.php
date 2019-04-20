@@ -22,6 +22,7 @@ if ($_POST) { // si le formulaire de connexion est soumis
       $membre = $resultat->fetch_assoc(); // pas de boucle while car un seul r�sultat tout au plus possible
       
       debug($membre);
+      debug($membre);
       
       if ($membre['mdp'] == $_POST['mdp']) {
         
