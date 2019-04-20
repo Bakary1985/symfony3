@@ -1,9 +1,10 @@
 <?php
 require_once('inc/init.inc.php');
-
+require_once('mandrill/src/Mandrill.php');
+$mandrill = new Mandrill('Qj6u2RXjNKDZTIv90TOSig');
 //var_dump($_SESSION['panier']);
 //------------------ TRAITEMENT ------------------
-
+$nom =$_SESSION['membre']['nom'];
 // 2- Ajout d'un produit au panier :
 //debug($_SESSION);
 
@@ -86,8 +87,8 @@ if (isset($_POST['valider']) && isset($_SESSION['panier']['id'])) { // si on a v
     
     //5.8 Envoi du mail de confirmation à l'internaute :
     // Vous pouvez intervenir temporairement sur le fichier php.ini avec les instructions suivantes :
-    ini_set('SMTP', 'smtp.free.fr'); // mettre en second argument le smtp de sa propre messagerie mail
-    ini_set('sendmail_from', 'vendeur@boutique.com');
+    //ini_set('SMTP', 'smtp.free.fr'); // mettre en second argument le smtp de sa propre messagerie mail
+    //ini_set('sendmail_from', 'vendeur@boutique.com');
     
      
     // variables utilisateur utilisées la fonction mail() :
@@ -97,8 +98,120 @@ if (isset($_POST['valider']) && isset($_SESSION['panier']['id'])) { // si on a v
     
     // La fonction mail():
     // mail($to, $subject, $message); // mis en commentaire pour que le script puisse continuer de focntionner
-    
-    
+
+        $html = "<div>
+            
+    <h2>Bonjour  $nom </h2>;
+    <p> Votre commande a été validée. Votre numéro de suivi est le  $id_commande  </p>
+    </div>";
+        $email ="bakarydiarra8509@gmail.com";
+        $sendto =$email;
+        $mail_to_name = 'bakary';
+        $text = "mon text";
+        $mail_from ="metropolegrandparis@bliwe.com";
+        $mail_from_name = 'bar';
+//'noreplay@murinnovation.com', 'noreplay@bliwe.com'
+        // Mail
+        $mail_content = $html;
+
+        if (! is_array ( $sendto )) {
+            $sendto = array (
+                array (
+                    "email" => $sendto,
+                    "name" => $mail_to_name,
+                    "type" => "to"
+                )
+            );
+        }
+
+        else {
+            if ($sendto ['email'] != '') {
+                $sendto = array (
+                    $sendto
+                );
+            }
+        }
+
+        $attachments = null;
+        $images = null;
+
+        $message = array (
+            'html' => $mail_content,
+            'text' => $text,
+            'subject' => $subject,
+            'from_email' => $mail_from,
+            'from_name' => $mail_from_name,
+            'to' => $sendto,
+            'headers' => array (
+                'Reply-To' => $mail_from
+            ),
+            'important' => false,
+            'track_opens' => null,
+            'track_clicks' => null,
+            'auto_text' => null,
+            'auto_html' => null,
+            'inline_css' => null,
+            'url_strip_qs' => null,
+            'preserve_recipients' => null,
+            'view_content_link' => null,
+            'bcc_address' => null, // MANDRILL_SEND_BCC,
+            'tracking_domain' => null,
+            'signing_domain' => 'www.murinnovation.com',
+            'return_path_domain' => null,
+            'merge' => true,
+            'global_merge_vars' => array (
+                array (
+                    'name' => 'merge1',
+                    'content' => 'merge1 content'
+                )
+            ),
+
+            'tags' => array (
+                'ENOVA'
+            ),
+            // 'subaccount' => 'testAnd1544',
+            'google_analytics_domains' => array (
+                'www.murinnovation.com'
+            ),
+            'google_analytics_campaign' => 'message.from_' . 'www.murinnovation.com',
+            'metadata' => array (
+                'website' => 'www.murinnovation.com'
+            ),
+            /*'recipient_metadata' => array(
+            array(
+                'rcpt' => MANDRILL_METADATA_RCPT,
+                'values' => array('user_id' => 145896325)
+            )
+            ),*/
+            'attachments' => $attachments,
+            'images' => $images
+        );
+
+        $async = false;
+        $ip_pool = 'Main Pool';
+        $send_at = null;
+        $result = $mandrill->messages->send ( $message, $async, $ip_pool, $send_at );
+
+        $return = $result [0];
+
+        // rejected //invalid //reject_reason
+        $failed = array (
+            'rejected',
+            'invalid'
+        );
+
+        // "sent", "queued", "scheduled"
+        $passed = array (
+            'sent',
+            'queued',
+            'scheduled'
+        );
+
+        if (in_array ( $return ['status'], $failed )) {
+            echo $return ['reject_reason'];
+
+            return false;
+        }
     
     
     
