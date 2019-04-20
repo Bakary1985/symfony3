@@ -44,7 +44,7 @@ if ($_POST) { // si le formulaire de connexion est soumis
 require_once('inc/haut.inc.php');
 echo $contenu;
 ?>
-<h3>Renseignez votre pseudo et votre mot de passe pour vous connecter</h3>
+<h3>dddddddddddddd ddddddddddd</h3>
 <form method = "post" action="">
   <label for="pseudo">Pseudo</label><br>
   <input type="text" id="pseudo" name="pseudo">
