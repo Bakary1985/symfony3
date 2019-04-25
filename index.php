@@ -3,7 +3,6 @@ require_once('inc/init.inc.php');
 
 //------------------ TRAITEMENT --------------------
 // 1- Affichage des catégories :
-/*
 $categories_des_produits = $mysqli->query("SELECT DISTINCT categorie FROM produit ORDER BY categorie");
 
 $contenu_gauche .= '<div class="col-md-3">';
@@ -20,7 +19,7 @@ $contenu_gauche .= '<div class="col-md-3">';
     $contenu_gauche .= '</div>';
 $contenu_gauche .= '</div>';
 
-*/
+
 // 2- Affichage des produits selon la catégorie choisie :
 if (isset($_GET['categorie']) && $_GET['categorie'] != 'all') {
     $donnees = $mysqli->query("SELECT id_produit, reference, titre, photo, prix, description FROM produit WHERE categorie = '$_GET[categorie]'");
